@@ -1,0 +1,2021 @@
+_____________________________ DSA PRATICALS _________________________________________________
+
+
+# 1. 
+Aim: Consider telephone book database of N clients. Make use of a hash table implementation to quickly look up client‘s telephone number. Make use of two collision handling techniques and compare them using number of comparisons required to find a set of telephone numbers.
+
+
+# using linear probing:
+class HashTable:
+    def __init__(self):
+        self.size = int(input("Enter the size of the hash table: "))
+        self.table = [0] * self.size
+        self.element_count = 0
+        self.comparisons = 0
+
+    def is_full(self):
+        return self.element_count == self.size
+
+    def hash_function(self, element):
+        return element % self.size
+
+    def quadratic_probing(self, element, position):
+        pos_found = False
+        limit = 50
+        i = 1
+        while i <= limit:
+            new_position = position + (i ** 2)
+            new_position = new_position % self.size
+            if self.table[new_position] == 0:
+                pos_found = True
+                break
+            i += 1
+        return pos_found, new_position
+
+    def insert(self, element):
+        if self.is_full():
+            print("Hash Table Full")
+            return False
+        is_stored = False
+        position = self.hash_function(element)
+        if self.table[position] == 0:
+            self.table[position] = element
+            print(f"Element {element} at position {position}")
+            is_stored = True
+            self.element_count += 1
+        else:
+            print(f"Collision occurred for element {element} at position {position}. Finding new position.")
+            is_stored, position = self.quadratic_probing(element, position)
+            if is_stored:
+                self.table[position] = element
+                self.element_count += 1
+        return is_stored
+
+    def search(self, element):
+        found = False
+        position = self.hash_function(element)
+        self.comparisons += 1
+        if self.table[position] == element:
+            return position
+        else:
+            limit = 50
+            i = 1
+            new_position = position
+            while i <= limit:
+                new_position = position + (i ** 2)
+                new_position = new_position % self.size
+                self.comparisons += 1
+                if self.table[new_position] == element:
+                    found = True
+                    break
+                elif self.table[new_position] == 0:
+                    found = False
+                    break
+                else:
+                    i += 1
+            if found:
+                return new_position
+            else:
+                print("Element not Found")
+                return False
+
+    def remove(self, element):
+        position = self.search(element)
+        if position is not False:
+            self.table[position] = 0
+            print(f"Element {element} is Deleted")
+            self.element_count -= 1
+        else:
+            print("Element is not present in the Hash Table")
+
+    def display(self):
+        print("\n")
+        for i in range(self.size):
+            print(f"{i} = {self.table[i]}")
+        print(f"The number of elements in the table are: {self.element_count}")
+
+
+# main function
+table1 = HashTable()
+# storing elements in table
+table1.insert(12)
+table1.insert(26)
+table1.insert(31)
+table1.insert(17)
+table1.insert(90)
+table1.insert(28)
+table1.insert(88)
+table1.insert(40)
+table1.insert(77)  # element that causes collision at position 0
+# displaying the Table
+table1.display()
+print()
+# printing position of elements
+print("The position of element 31 is:", table1.search(31))
+print("The position of element 28 is:", table1.search(28))
+print("The position of element 90 is:", table1.search(90))
+print("The position of element 77 is:", table1.search(77))
+print("The position of element 1 is:", table1.search(1))
+print("\nTotal number of comparisons done for searching =", table1.comparisons)
+
+print()
+table1.remove(90)
+table1.remove(12)
+table1.display()
+
+
+
+#using quadratic probing
+
+
+class HashTable:
+    def __init__(self):
+        self.size = int(input("Enter the size of the hash table: "))
+        self.table = [0] * self.size
+        self.element_count = 0
+        self.comparisons = 0
+
+    def is_full(self):
+        return self.element_count == self.size
+
+    def hash_function(self, element):
+        return element % self.size
+
+    def quadratic_probing(self, element, position):
+        pos_found = False
+        limit = 50
+        i = 1
+        while i <= limit:
+            new_position = position + (i ** 2)
+            new_position = new_position % self.size
+            if self.table[new_position] == 0:
+                pos_found = True
+                break
+            i += 1
+        return pos_found, new_position
+
+    def insert(self, element):
+        if self.is_full():
+            print("Hash Table Full")
+            return False
+        is_stored = False
+        position = self.hash_function(element)
+        if self.table[position] == 0:
+            self.table[position] = element
+            print(f"Element {element} at position {position}")
+            is_stored = True
+            self.element_count += 1
+        else:
+            print(f"Collision has occurred for element {element} at position {position}. Finding new position.")
+            is_stored, position = self.quadratic_probing(element, position)
+            if is_stored:
+                self.table[position] = element
+                self.element_count += 1
+        return is_stored
+
+    def search(self, element):
+        found = False
+        position = self.hash_function(element)
+        self.comparisons += 1
+        if self.table[position] == element:
+            return position
+        else:
+            limit = 50
+            i = 1
+            new_position = position
+            while i <= limit:
+                new_position = position + (i ** 2)
+                new_position = new_position % self.size
+                self.comparisons += 1
+                if self.table[new_position] == element:
+                    found = True
+                    break
+                elif self.table[new_position] == 0:
+                    found = False
+                    break
+                else:
+                    i += 1
+            if found:
+                return new_position
+            else:
+                print("Element not Found")
+                return False
+
+    def remove(self, element):
+        position = self.search(element)
+        if position is not False:
+            self.table[position] = 0
+            print(f"Element {element} is Deleted")
+            self.element_count -= 1
+        else:
+            print("Element is not present in the Hash Table")
+
+    def display(self):
+        print("\n")
+        for i in range(self.size):
+            print(f"{i} = {self.table[i]}")
+        print(f"The number of elements in the table are: {self.element_count}")
+
+
+# main function
+table1 = HashTable()
+# storing elements in table
+table1.insert(12)
+table1.insert(26)
+table1.insert(31)
+table1.insert(17)
+table1.insert(90)
+table1.insert(28)
+table1.insert(88)
+table1.insert(40)
+table1.insert(77)  # element that causes collision at position 0
+# displaying the Table
+table1.display()
+print()
+# printing position of elements
+print("The position of element 31 is:", table1.search(31))
+print("The position of element 28 is:", table1.search(28))
+print("The position of element 90 is:", table1.search(90))
+print("The position of element 77 is:", table1.search(77))
+print("The position of element 1 is:", table1.search(1))
+print("\nTotal number of comparisons done for searching =", table1.comparisons)
+
+print()
+table1.remove(90)
+table1.remove(12)
+table1.display()
+
+
+
+
+
+
+
+# 2.aim : For given set of elements create skip list. Find the element in the set that is closest to some given value.
+
+
+import random
+
+class Node:
+    '''
+    Class to implement node
+    '''
+    def __init__(self, key, level):
+        self.key = key
+        # list to hold references to node of different level
+        self.forward = [None]*(level+1)
+
+class SkipList:
+    '''
+    Class for Skip list
+    '''
+    def __init__(self, max_lvl, P):
+        # Maximum level for this skip list
+        self.MAXLVL = max_lvl
+        # P is the fraction of the nodes with level
+        # i references also having level i+1 references
+        self.P = P
+        # create header node and initialize key to -1
+        self.header = self.createNode(self.MAXLVL, -1)
+        # current level of skip list
+        self.level = 0
+    
+    # create new node
+    def createNode(self, lvl, key):
+        n = Node(key, lvl)
+        return n
+
+    # create random level for node
+    def randomLevel(self):
+        lvl = 0
+        while random.random() < self.P and lvl < self.MAXLVL:
+            lvl += 1
+        return lvl
+
+    # insert given key in skip list
+    def insertElement(self, key):
+        # create update array and initialize it
+        update = [None]*(self.MAXLVL+1)
+        current = self.header
+
+        '''
+        start from highest level of skip list
+        move the current reference forward while key
+        is greater than key of node next to current
+        Otherwise inserted current in update and
+        move one level down and continue search
+        '''
+        for i in range(self.level, -1, -1):
+            while current.forward[i] and current.forward[i].key < key:
+                current = current.forward[i]
+            update[i] = current
+
+        '''
+        reached level 0 and forward reference to
+        right, which is desired position to
+        insert key.
+        '''
+        current = current.forward[0]
+
+        '''
+        if current is NULL that means we have reached
+        to end of the level or current's key is not equal
+        to key to insert that means we have to insert
+        node between update[0] and current node
+        '''
+        if current == None or current.key != key:
+            # Generate a random level for node
+            rlevel = self.randomLevel()
+
+            '''
+            If random level is greater than list's current
+            level (node with highest level inserted in
+            list so far), initialize update value with reference
+            to header for further use
+            '''
+            if rlevel > self.level:
+                for i in range(self.level+1, rlevel+1):
+                    update[i] = self.header
+                self.level = rlevel
+
+            # create new node with random level generated
+            n = self.createNode(rlevel, key)
+
+            # insert node by rearranging references
+            for i in range(rlevel+1):
+                n.forward[i] = update[i].forward[i]
+                update[i].forward[i] = n
+            print("Successfully inserted key", key)
+
+    def deleteElement(self, search_key):
+        # create update array and initialize it
+        update = [None]*(self.MAXLVL+1)
+        current = self.header
+
+        '''
+        start from highest level of skip list
+
+        move the current reference forward while key
+        is greater than key of node next to current
+        Otherwise inserted current in update and
+        move one level down and continue search
+        '''
+        for i in range(self.level, -1, -1):
+            while(current.forward[i] and current.forward[i].key < search_key):
+                current = current.forward[i]
+            update[i] = current
+
+        '''
+        reached level 0 and advance reference to
+        right, which is possibly our desired node
+        '''
+        current = current.forward[0]
+
+        # If current node is target node
+        if current != None and current.key == search_key:
+            '''
+            start from lowest level and rearrange references
+            just like we do in singly linked list
+            to remove target node
+            '''
+            for i in range(self.level+1):
+                '''
+                If at level i, next node is not target
+                node, break the loop, no need to move
+                further level
+                '''
+                if update[i].forward[i] != current:
+                    break
+                update[i].forward[i] = current.forward[i]
+
+            # Remove levels having no elements
+            while self.level > 0 and self.header.forward[self.level] == None:
+                self.level -= 1
+            print("Successfully deleted", search_key)
+
+    def searchElement(self, key):
+        current = self.header
+        '''
+        start from highest level of skip list
+        move the current reference forward while key
+        is greater than key of node next to current
+        Otherwise inserted current in update and
+        move one level down and continue search
+        '''
+        for i in range(self.level, -1, -1):
+            while current.forward[i] and current.forward[i].key < key:
+                current = current.forward[i]
+
+        # reached level 0 and advance reference to
+        # right, which is possibly our desired node
+        current = current.forward[0]
+
+        # If current node have key equal to
+        # search key, we have found our target node
+        if current and current.key == key:
+            print("Found key", key)
+
+    # Display skip list level wise
+    def displayList(self):
+        print("\n*****Skip List******")
+        head = self.header
+        for lvl in range(self.level+1):
+            print("Level {}: ".format(lvl), end=" ")
+            node = head.forward[lvl]
+            while node != None:
+                print(node.key, end=" ")
+                node = node.forward[lvl]
+            print("")
+
+# Driver to test above code
+def main():
+    lst = SkipList(3, 0.5)
+    lst.insertElement(3)
+    lst.insertElement(6)
+    lst.insertElement(7)
+    lst.insertElement(9)
+    lst.insertElement(12)
+    lst.insertElement(19)
+    lst.insertElement(17)
+    lst.insertElement(26)
+    lst.insertElement(21)
+    lst.insertElement(25)
+    lst.displayList()
+    # Search for node 19
+    lst.searchElement(19)
+    # Delete node 19
+    lst.deleteElement(19)
+    lst.displayList()
+
+main()
+
+
+
+
+
+
+// 3.AIM:  A book consists of chapters, chapters consist of sections and sections consist of subsections. Construct a tree and print the nodes. Find the time and space requirements of your method.
+
+#include <iostream>
+using namespace std;
+
+class TREE_CLASS
+{
+private:
+    typedef struct bin
+    {
+        char data[50];
+        struct bin *left;
+        struct bin *right;
+    } node;
+
+public:
+    node *New, *root;
+    TREE_CLASS();
+    void create();
+    void insert(node *, node *);
+    void rec_inorder(node *);
+    void printLevelOrder(node *root);
+    void printLevel(node *root, int level);
+    int height(node *node);
+};
+
+TREE_CLASS::TREE_CLASS()
+{
+    root = NULL;
+}
+
+void TREE_CLASS::create()
+{
+    char ans = 'y';
+    do
+    {
+        New = new node;
+        cout << "\n Enter The Book/Chapter/Section: ";
+        cin >> New->data;
+        New->left = NULL;
+        New->right = NULL;
+        if (root == NULL)
+            root = New;
+        else
+            insert(root, New);
+        cout << "\n Do You want To Enter More Chapter/Section?(y/n): ";
+        cin >> ans;
+    } while (ans == 'y' || ans == 'Y');
+}
+
+void TREE_CLASS::insert(node *root, node *New)
+{
+    char ch;
+    cout << "\n Where to insert left(l)/right(r) of " << root->data << " : ";
+    cin >> ch;
+    if ((ch == 'r') || (ch == 'R'))
+    {
+        if (root->right == NULL)
+        {
+            root->right = New;
+        }
+        else
+            insert(root->right, New);
+    }
+    else
+    {
+        if (root->left == NULL)
+        {
+            root->left = New;
+        }
+        else
+            insert(root->left, New);
+    }
+}
+
+void TREE_CLASS::rec_inorder(node *root)
+{
+    if (root != NULL)
+    {
+        rec_inorder(root->left);
+        cout << " " << root->data;
+        rec_inorder(root->right);
+    }
+}
+
+void TREE_CLASS::printLevelOrder(node *root)
+{
+    int h = height(root);
+    int i;
+    for (i = 1; i <= h; i++)
+    {
+        cout << "\n";
+        printLevel(root, i);
+    }
+}
+
+/* Print nodes at a given level */
+void TREE_CLASS::printLevel(node *root, int level)
+{
+    if (root == NULL)
+        return;
+    if (level == 1)
+        cout << " " << root->data;
+    else if (level > 1)
+    {
+        printLevel(root->left, level - 1);
+        printLevel(root->right, level - 1);
+    }
+}
+
+/* Compute the "height" of a tree */
+int TREE_CLASS::height(node *node)
+{
+    if (node == NULL)
+        return 0;
+    else
+    {
+        int lheight = height(node->left);
+        int rheight = height(node->right);
+        if (lheight > rheight)
+            return (lheight + 1);
+        else
+            return (rheight + 1);
+    }
+}
+
+int main()
+{
+    int choice;
+    TREE_CLASS obj;
+    do
+    {
+        cout << "\n\t\tMain Menu";
+        cout << "\n 1.Create";
+        cout << "\n 2.Display";
+        cout << "\n 3.Exit";
+        cout << "\n\t Enter Your Choice: ";
+        cin >> choice;
+        switch (choice)
+        {
+        case 1:
+            obj.create();
+            break;
+        case 2:
+            if (obj.root == NULL)
+                cout << "Tree Is not Created!";
+            else
+                obj.printLevelOrder(obj.root);
+            break;
+        }
+    } while (choice <= 2);
+}
+
+
+
+
+
+
+// 4. AIM:
+// Beginning with an empty binary search tree, Construct binary search tree by inserting the values in
+// the order given. After constructing a binary tree –
+// i. Insert new node,
+// ii. Find number of nodes in longest path from root,
+// iii. Minimum data value found in the tree,
+// iv. Change a tree so that the roles of the left and right pointers are swapped at every node,
+// v. Search a value.
+
+
+#include <iostream>
+#define size 20
+using namespace std;
+
+class bintree
+{
+    typedef struct bst
+    {
+        int data;
+        struct bst *left, *right;
+    } node;
+
+    node *root, *temp, *parent;
+    node *que[20];
+    int front, rear;
+
+public:
+    bintree()
+    {
+        root = NULL;
+        front = rear = -1;
+    }
+    void create();
+    void display();
+    void find();
+    void insert(node *, node *);
+    void inorder(node *);
+    void search(node **, int, node **);
+    void LongestPathNodes();
+    int Depth(node *);
+    void FindMinValue();
+    void minValue(node *, int *);
+    void Mirroring();
+    void mirror(node *);
+    void LevelWiseDisplay(node *root);
+    void enque(node *);
+    node *deque();
+};
+
+void bintree::create()
+{
+    node *New = new node;
+    New->left = NULL;
+    New->right = NULL;
+    cout << "\n Enter The Element : ";
+    cin >> New->data;
+    if (root == NULL)
+        root = New;
+    else
+        insert(root, New);
+}
+void bintree::insert(node *root, node *New)
+{
+    if (New->data < root->data)
+    {
+        if (root->left == NULL)
+            root->left = New;
+        else
+            insert(root->left, New);
+    }
+
+    if (New->data > root->data)
+    {
+        if (root->right == NULL)
+            root->right = New;
+        else
+            insert(root->right, New);
+    }
+}
+void bintree::display()
+{
+    if (root == NULL)
+        cout << "Tree Is Not Created";
+    else
+    {
+        cout << "\n The Tree is : ";
+        inorder(root);
+    }
+}
+void bintree::inorder(node *temp)
+{
+    if (temp != NULL)
+    {
+        inorder(temp->left);
+        cout << " " << temp->data;
+        inorder(temp->right);
+    }
+}
+void bintree::FindMinValue()
+{
+    int min = root->data;
+    minValue(root, &min);
+    cout << "\n The minimum value node within a tree is " << min;
+}
+void bintree::minValue(node *temp, int *min)
+{
+    if (temp != NULL)
+    {
+        minValue(temp->left, min);
+        if (temp->data < *min)
+            *min = temp->data;
+        minValue(temp->right, min);
+    }
+}
+void bintree::find()
+{
+    int key;
+    cout << "\n Enter The Element Which You Want To Search : ";
+    cin >> key;
+    temp = root;
+    search(&temp, key, &parent);
+    if (temp == NULL)
+        cout << "\n Element is not present";
+    else
+        cout << "\nParent of node " << temp->data << " is " << parent->data;
+}
+void bintree::search(node **temp, int key, node **parent)
+{
+    if (*temp == NULL)
+        cout << endl
+             << "Tree is Not Created" << endl;
+    else
+    {
+        while (*temp != NULL)
+        {
+            if ((*temp)->data == key)
+            {
+                cout << "\nElement " << (*temp)->data << " is Present ";
+                break;
+            }
+            *parent = *temp;
+            if ((*temp)->data > key)
+                *temp = (*temp)->left;
+
+            else
+                *temp = (*temp)->right;
+        }
+    }
+    return;
+}
+void bintree::LongestPathNodes()
+{
+    if (root == NULL)
+        cout << "\n Tree is empty!!!";
+    else
+    {
+        /* compute the depth of each subtree */
+        int lDepth = Depth(root);
+        int rDepth = Depth(root);
+        /* use the larger one */
+        if (lDepth > rDepth)
+            cout << "\n The number of nodes on Longest Path = " << lDepth + 1;
+        else
+            cout << "\n The number of nodes on Longest Path = " << rDepth + 1;
+    }
+}
+int bintree::Depth(node *root)
+{
+    if (root == NULL)
+        return 0;
+    else
+    {
+        /* compute the depth of each subtree */
+        int lDepth = Depth(root->left);
+        int rDepth = Depth(root->right);
+        /* Return the larger one */
+        if (lDepth > rDepth)
+            return lDepth;
+        else
+            return (rDepth + 1);
+    }
+}
+void bintree::enque(node *temp)
+{
+    if (rear == size - 1)
+    {
+        cout << "Queue is empty\n";
+        return;
+    }
+    rear = rear + 1;
+    que[rear] = temp;
+}
+bintree::node *bintree::deque()
+{
+    node *temp;
+    if (front == rear)
+    {
+        cout << "Queue is empty";
+        return NULL;
+    }
+    front++;
+    temp = que[front];
+    return temp;
+}
+void bintree::LevelWiseDisplay(node *root)
+{
+    node *temp, *dummy;
+    dummy = new node;
+
+    front = rear = -1;
+    if (dummy == NULL)
+        cout << "Insufficient Memory\n";
+    dummy->left = root;
+    dummy->right = NULL;
+    dummy->data = -999;
+    temp = dummy->left;
+    enque(temp); // inserting the node in the queue
+    enque(dummy);
+    temp = deque(); // deleting the node from the queue
+    cout << "\n";
+    while (front != rear)
+    {
+        if (temp != dummy)
+        {
+            cout << " " << temp->data;
+            if (temp->left != NULL)
+                enque(temp->left);
+            if (temp->right != NULL)
+                enque(temp->right);
+        }
+        else
+        {
+            enque(temp);
+            cout << "\n";
+        }
+        temp = deque();
+    }
+}
+void bintree::Mirroring()
+{
+    cout << "\n Original Tree";
+    LevelWiseDisplay(root);
+    mirror(root);
+    cout << "\n Tree with Swapped Nodes";
+    LevelWiseDisplay(root);
+    mirror(root); // bringing back the tree to original state
+}
+void bintree::mirror(node *root)
+{
+    node *temp_node;
+    if (root != NULL)
+    {
+        mirror(root->left);
+        mirror(root->right);
+        // swapping the left and right child nodes
+        temp_node = root->left;
+        root->left = root->right;
+        root->right = temp_node;
+    }
+}
+int main()
+{
+    int choice;
+    char ans = 'N';
+    bintree tr;
+    do
+    {
+        cout << "\n\t Program For Binary Search Tree";
+        cout << "\n1.Create";
+        cout << "\n2.Display";
+        cout << "\n3.Longest Path Nodes";
+        cout << "\n4.Find Minimum Value";
+        cout << "\n5.Change Tree by Swapping nodes";
+        cout << "\n6.Search";
+        cout << "\n\n Enter your choice : ";
+
+        cin >> choice;
+        switch (choice)
+        {
+        case 1:
+            do
+            {
+                tr.create();
+                cout << "Do u Want To enter More elements?(y/n) " << endl;
+                cin >> ans;
+            } while (ans == 'y');
+            break;
+        case 2:
+            tr.display();
+            break;
+        case 3:
+            tr.LongestPathNodes();
+            break;
+        case 4:
+            tr.FindMinValue();
+            break;
+        case 5:
+            tr.Mirroring();
+            break;
+        case 6:
+            tr.find();
+            break;
+        }
+    } while (choice != 7);
+    return 0;
+}
+
+
+
+
+
+// 5.  Aim: Construct an expression tree from the given prefix expression eg. +--a*bc/def and
+// traverse it using post order traversal (non recursive) and then delete the entire tree.
+
+#include <iostream>
+#include <string.h>
+using namespace std;
+
+struct node
+{
+    char data;
+    node *left;
+    node *right;
+};
+
+class stack1
+{
+    node *data[30];
+    int top;
+
+public:
+    stack1()
+    {
+        top = -1;
+    }
+    int empty()
+    {
+        if (top == -1)
+            return 1;
+        return 0;
+    }
+    void push(node *p)
+    {
+        data[++top] = p;
+    }
+    node *pop()
+    {
+        return (data[top--]);
+    }
+};
+
+class tree
+{
+    char prefix[20];
+
+public:
+    node *top;
+    void expression(char[]);
+    void display(node *);
+    void non_rec_postorder(node *);
+    void del(node *);
+};
+
+void tree::expression(char prefix[])
+{
+    char c;
+    stack1 s;
+    node *t1, *t2;
+    int len, i;
+    len = strlen(prefix);
+    for (i = len - 1; i >= 0; i--)
+    {
+        top = new node;
+        top->left = NULL;
+        top->right = NULL;
+        if (isalpha(prefix[i]))
+        {
+            top->data = prefix[i];
+            s.push(top);
+        }
+        else if (prefix[i] == '+' || prefix[i] == '*' || prefix[i] == '-' || prefix[i] == '/')
+        {
+            t2 = s.pop();
+            t1 = s.pop();
+            top->data = prefix[i];
+            top->left = t2;
+            top->right = t1;
+            s.push(top);
+        }
+    }
+    top = s.pop();
+}
+
+void tree::display(node *root)
+{
+    if (root != NULL)
+    {
+        cout << root->data;
+        display(root->left);
+        display(root->right);
+    }
+}
+
+void tree::non_rec_postorder(node *top)
+{
+    stack1 s1, s2; /*stack s1 is being used for flag . A NULL data implies that the right subtree has not been visited */
+    node *T = top;
+    cout << "\n";
+    s1.push(T);
+    while (!s1.empty())
+    {
+        T = s1.pop();
+        s2.push(T);
+        if (T->left != NULL)
+            s1.push(T->left);
+        if (T->right != NULL)
+            s1.push(T->right);
+    }
+    while (!s2.empty())
+    {
+        top = s2.pop();
+        cout << top->data;
+    }
+}
+
+void tree::del(node *node)
+{
+    if (node == NULL)
+        return;
+    /* first delete both subtrees */
+    del(node->left);
+    del(node->right);
+    /* then delete the node */
+    cout << endl
+         << "Deleting node : " << node->data << endl;
+    free(node);
+}
+
+int main()
+{
+    char expr[20];
+    tree t;
+
+    cout << "Enter prefix Expression : ";
+    cin >> expr;
+    cout << expr;
+    t.expression(expr);
+    //t.display(t.top);
+    //cout<<endl;
+    t.non_rec_postorder(t.top);
+    t.del(t.top);
+    // t.display(t.top);
+
+    return 0;
+}
+
+
+
+
+
+
+
+// 6.Aim: Represent a given graph using adjacency matrix/list to perform DFS and using adjacency list to  perform BFS. Use the map of the area around the college as the graph. Identify the prominent land marks as nodes and perform DFS and BFS on that.
+
+
+
+#include <iostream>
+using namespace std;
+
+#define MAX 20
+#define TRUE 1
+#define FALSE 0
+
+class Gdfs
+{
+private:
+    int g[MAX][MAX], v[MAX];
+    int v1, v2;
+
+public:
+    int n;
+    static int node_count;
+    Gdfs();
+    void create(), display();
+    void Dfs(int);
+    ~Gdfs();
+};
+
+int Gdfs::node_count = 0;
+
+Gdfs::Gdfs()
+{
+    for (v1 = 0; v1 < MAX; v1++)
+        v[v1] = FALSE;
+    for (v1 = 0; v1 < MAX; v1++)
+        for (v2 = 0; v2 < MAX; v2++)
+            g[v1][v2] = FALSE;
+}
+
+Gdfs::~Gdfs()
+{
+    for (v1 = 0; v1 < MAX; v1++)
+    {
+        for (v2 = 0; v2 < MAX; v2++)
+            g[v1][v2] = FALSE;
+    }
+    for (v1 = 0; v1 < MAX; v1++)
+        v[v1] = FALSE;
+}
+
+void Gdfs::display()
+{
+    for (v1 = 0; v1 < n; v1++)
+    {
+        for (v2 = 0; v2 < n; v2++)
+            cout << " " << g[v1][v2];
+        cout << endl;
+    }
+}
+
+void Gdfs::create()
+{
+    int v1, v2;
+    n = 0;
+    do
+    {
+        cout << "\nEnter the Edge of a graph by two vertices \n";
+        cout << "(and type -99 terminate)\n";
+        cin >> v1 >> v2;
+        if (v1 == -99)
+            break;
+        if (v1 >= MAX || v2 >= MAX)
+            cout << "Invalid Vertex Value\n";
+        else
+            g[v1][v2] = TRUE;
+        g[v2][v1] = TRUE;
+        n++;
+    } while (1);
+}
+
+void Gdfs::Dfs(int v1)
+{
+    int v2;
+    cout << endl
+         << v1;
+    node_count++;
+    v[v1] = TRUE;
+    for (v2 = 0; v2 < n; v2++)
+        if (g[v1][v2] == TRUE && v[v2] == FALSE)
+            Dfs(v2);
+}
+
+int main()
+{
+    Gdfs gr;
+    int v1;
+    gr.create();
+    cout << "The Adjacency Matrix for the graph is " << endl;
+    gr.display();
+    cout << "Enter the Vertex from which you want to traverse: ";
+    cin >> v1;
+    if (v1 >= MAX)
+        cout << "Invalid Vertex\n";
+    cout << "The Depth First Search of the Graph is " << endl;
+    gr.Dfs(v1);
+    cout << "\n Total Number of Nodes in Graph = " << Gdfs::node_count << endl;
+    return 0;
+}
+
+
+
+
+
+
+
+
+
+7.Aim: There are flight paths between cities. If there is a flight between city A and city B then there is an edge between the cities. The cost of the edge can be the time that flight take to reach city B from A, or the amount of fuel used for the journey. Represent this as a graph. The node can be represented by airport name or name of the city. Use adjacency list representation of the graph or use adjacency matrix representation of the graph. Check whether the graph is connected or not. Justify the storage representation used.
+
+
+#include <vector>
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Vertex; // Forward reference of class Vertex
+
+// Edge Class defined
+class Edge {
+private:
+    Vertex *source;
+    Vertex *destination;
+    int distance;
+
+public:
+    Edge(Vertex *s, Vertex *d, int dist) {
+        source = s;
+        destination = d;
+        distance = dist;
+    }
+
+    Vertex *getSource() {
+        return source;
+    }
+
+    Vertex *getDestination() {
+        return destination;
+    }
+
+    int getDistance() {
+        return distance;
+    }
+};
+
+// Vertex Class defined
+class Vertex {
+private:
+    string city;
+    vector<Edge> edges; // vector created for edges
+
+public:
+    Vertex(string name) {
+        city = name;
+    }
+
+    void addEdge(Vertex *v, int dist) {
+        Edge newEdge(this, v, dist); // creating object of Edge(source, destination, distance)
+        edges.push_back(newEdge); // creating adjacency List
+    }
+
+    void showEdge() {
+        cout << "From " << city << " to " << endl;
+        for (int i = 0; i < (int)edges.size(); i++) {
+            Edge e = edges[i];
+            cout << e.getDestination()->getCity() << " requires " << e.getDistance() << "hrs" << endl;
+        }
+        cout << endl;
+    }
+
+    string getCity() {
+        return city;
+    }
+
+    vector<Edge> getEdges() {
+        return edges;
+    }
+};
+
+// Main class for Graph
+class Graph {
+private:
+    vector<Vertex *> v;
+
+public:
+    Graph() {} // constructor
+
+    void insert(Vertex *val) {
+        v.push_back(val);
+    }
+
+    void Display() {
+        for (int i = 0; i < (int)v.size(); i++)
+            v[i]->showEdge();
+    }
+};
+
+int main() {
+    Graph g;
+
+    // creating veritces or nodes for each city
+    Vertex v1 = Vertex("Mumbai");
+    Vertex v2 = Vertex("Pune");
+    Vertex v3 = Vertex("Kolkata");
+    Vertex v4 = Vertex("Delhi");
+
+    // creating pointers to nodes
+    Vertex *vptr1 = &v1;
+    Vertex *vptr2 = &v2;
+    Vertex *vptr3 = &v3;
+    Vertex *vptr4 = &v4;
+
+    // Attaching the nodes by adding edges
+    v1.addEdge(vptr4, 2);
+    v2.addEdge(vptr1, 1);
+    v3.addEdge(vptr1, 3);
+    v4.addEdge(vptr2, 2);
+    v4.addEdge(vptr3, 3);
+
+    // creating graph
+    g.insert(vptr1);
+    g.insert(vptr2);
+    g.insert(vptr3);
+    g.insert(vptr4);
+
+    cout << "\n \t Displaying City Transport Map using Adjacency List" << endl;
+    g.Display();
+
+    return 1;
+}
+
+
+
+
+
+
+
+
+// 8. Aim: Given sequence k = k1 < ... < kn of n sorted keys, with a search probability pi for each key ki. Build the  Binary search tree that has the least search cost given the access probability for each key?
+
+
+#include<iostream>
+
+using namespace std;
+
+#define SIZE 10
+
+class OBST {
+    int p[SIZE]; // Probabilities with which we search for an element
+    int q[SIZE]; // Probabilities that an element is not found
+    int a[SIZE]; // Elements from which OBST is to be built
+    int w[SIZE][SIZE]; // Weight ‘w[i][j]’ of a tree having root ‘r[i][j]’
+    int c[SIZE][SIZE]; // Cost ‘c[i][j] of a tree having root ‘r[i][j]
+    int r[SIZE][SIZE]; // represents root
+    int n; // number of nodes
+
+public:
+    /* This function adds the input data */
+    void get_data() {
+        int i;
+        cout << "\n Optimal Binary Search Tree \n";
+        cout << "\n Enter the number of nodes: ";
+        cin >> n;
+        cout << "\n Enter the data as...\n";
+        for (i = 1; i <= n; i++) {
+            cout << "\n a[" << i << "]: ";
+            cin >> a[i];
+        }
+        cout << "Enter probabilities for successful search ...\n";
+        for (i = 1; i <= n; i++) {
+            cout << "\n p[" << i << "]: ";
+            cin >> p[i];
+        }
+        cout << "Enter probabilities for unsuccessful search ...\n";
+        for (i = 0; i <= n; i++) {
+            cout << "\n q[" << i << "]: ";
+            cin >> q[i];
+        }
+    }
+
+    /* This function returns a value in the range ‘r[i][j-1]’ to ‘r[i+1][j]’ so
+    that the cost ‘c[i][k-1]+c[k][j]’ is minimum */
+    int Min_Value(int i, int j) {
+        int m, k;
+        int minimum = 32000;
+        for (m = r[i][j - 1]; m <= r[i + 1][j]; m++) {
+            if ((c[i][m - 1] + c[m][j]) < minimum) {
+                minimum = c[i][m - 1] + c[m][j];
+                k = m;
+            }
+        }
+        return k;
+    }
+
+    /* This function builds the table from all the given probabilities. It
+    basically computes C, r, W values */
+    void build_OBST() {
+        int i, j, k, m;
+        for (i = 0; i < n; i++) {
+            // initialize
+            w[i][i] = q[i];
+            r[i][i] = c[i][i] = 0;
+
+            // Optimal trees with one node
+            w[i][i + 1] = q[i] + q[i + 1] + p[i + 1];
+            r[i][i + 1] = i + 1;
+            c[i][i + 1] = q[i] + q[i + 1] + p[i + 1];
+        }
+        w[n][n] = q[n];
+        r[n][n] = c[n][n] = 0;
+
+        // Find optimal trees with ‘m’ nodes
+        for (m = 2; m <= n; m++) {
+            for (i = 0; i <= n - m; i++) {
+                j = i + m;
+                w[i][j] = w[i][j - 1] + p[j] + q[j];
+                k = Min_Value(i, j);
+                c[i][j] = w[i][j] + c[i][k - 1] + c[k][j];
+                r[i][j] = k;
+            }
+        }
+    }
+
+    /* This function builds the tree from the tables made by the OBST function */
+    void build_tree() {
+        int i, j, k;
+        int queue[20], front = -1, rear = -1;
+        cout << "The Optimal Binary Search Tree For the Given Node Is...\n";
+        cout << "\n The Root of this OBST is ::" << r[0][n];
+        cout << "\nThe Cost of this OBST is::" << c[0][n];
+        cout << "\n\n\t NODE \t LEFT CHILD \t RIGHT CHILD ";
+        cout << "\n";
+        queue[++rear] = 0;
+        queue[++rear] = n;
+        while (front != rear) {
+            i = queue[++front];
+            j = queue[++front];
+            k = r[i][j];
+            cout << "\n\t" << k;
+            if (r[i][k - 1] != 0) {
+                cout << "\t\t" << r[i][k - 1];
+                queue[++rear] = i;
+                queue[++rear] = k - 1;
+            } else
+                cout << "\t\t";
+            if (r[k][j] != 0) {
+                cout << "\t" << r[k][j];
+                queue[++rear] = k;
+                queue[++rear] = j;
+            } else
+                cout << "\t";
+        }//end of while
+        cout << "\n";
+    }
+}; // end of the class
+
+/*This is the main function */
+int main() {
+    OBST obj;
+    obj.get_data();
+    obj.build_OBST();
+    obj.build_tree();
+    return 0;
+}
+
+
+
+
+
+
+
+// 9. Aim: A Dictionary stores keywords and its meanings. Provide facility for adding new  keywords, deleting keywords, updating values of any entry. Provide facility to display whole  data sorted in ascending/ Descending order. Also find how many maximum comparisons  may require for finding any keyword. Use Height balance tree and find the complexity for finding a keyword.
+
+#include <iostream>
+using namespace std;
+
+class node {
+public:
+    string word;
+    string meaning;
+    node* left = NULL;
+    node* right = NULL;
+
+    node(string x, string y) {
+        word = x;
+        meaning = y;
+        left = NULL;
+        right = NULL;
+    }
+
+    friend class Dictionary;
+};
+
+class Dictionary {
+public:
+    node* root, *q; // q is parent here
+    Dictionary() {
+        root = NULL;
+        q = NULL;
+    }
+
+    void insert(node*, string, string);
+    void display_asc(node *);
+    void display_desc(node *);
+    void comparisons(node*, string);
+    void updateWord(node*, string);
+    void deleteWord(node*, string);
+    node* min_node(node *);
+};
+
+void Dictionary::insert(node* p, string key, string keyMeaning) {
+    if (key < p->word) {
+        if (p->left != NULL)
+            insert(p->left, key, keyMeaning);
+        else
+            p->left = new node(key, keyMeaning);
+    }
+    else if (key > p->word) {
+        if (p->right != NULL)
+            insert(p->right, key, keyMeaning);
+        else
+            p->right = new node(key, keyMeaning);
+    }
+}
+
+void Dictionary::display_asc(node* p) { // inorder
+    if (p->left != NULL)
+        display_asc(p->left);
+    cout << "\n" << p->word << " \t" << p->meaning;
+    if (p->right != NULL)
+        display_asc(p->right);
+}
+
+void Dictionary::display_desc(node* p) {
+    if (p->right != NULL)
+        display_desc(p->right);
+    cout << "\n" << p->word << " \t" << p->meaning;
+    if (p->left != NULL)
+        display_desc(p->left);
+}
+
+void Dictionary::comparisons(node* p, string key) {
+    static int count = 0;
+    while (p != NULL) {
+        if (key < p->word) {
+            count++;
+            p = p->left;
+        }
+        else if (key > p->word) {
+            count++;
+            p = p->right;
+        }
+        else if (key == p->word) {
+            count++;
+            cout << "Number of comparisons to find the word: " << count;
+            return;
+        }
+    }
+    cout << "\nWord not found!";
+}
+
+node* Dictionary::min_node(node* p) {
+    while (p->left != NULL) {
+        q = p;
+        p = p->left;
+    }
+    return p;
+}
+
+void Dictionary::deleteWord(node* p, string key) {
+    node* s;
+    while (p != NULL) { // searching for word
+        if (key < p->word) {
+            q = p;
+            p = p->left;
+        }
+        else if (key > p->word) {
+            q = p;
+            p = p->right;
+        }
+        else if (key == p->word) { // word found
+            if (p->left == NULL && p->right == NULL) { // no child
+                if (q->left == p) {
+                    delete p;
+                    q->left = NULL;
+                    return;
+                }
+                if (q->right == p) {
+                    delete p;
+                    q->right = NULL;
+                    return;
+                }
+            }
+            if (p->right != NULL && p->left == NULL) { // right child only
+                if (q->right == p) {
+                    q->right = p->right;
+                    delete p;
+                    return;
+                }
+                else if (q->left == p) {
+                    q->left = p->right;
+                    delete p;
+                    return;
+                }
+            }
+            else if (p->left != NULL && p->right == NULL) { // left child only
+                if (q->right == p) {
+                    q->right = p->left;
+                    delete p;
+                    return;
+                }
+                else if (q->left == p) {
+                    q->left = p->left;
+                    delete p;
+                    return;
+                }
+            }
+            else if (p->left != NULL && p->right != NULL) {
+                s = min_node(p->right);
+                p->word = s->word;
+                p->meaning = s->meaning;
+                deleteWord(s, s->word);
+                return;
+            }
+        }
+    }
+    cout << "\nWord NOT found!";
+}
+
+void Dictionary::updateWord(node* p, string key) {
+    while (p != NULL) {
+        if (key < p->word)
+            p = p->left;
+        else if (key > p->word)
+            p = p->right;
+        else if (key == p->word) {
+            cout << "\nEnter its new meaning: ";
+            cin >> p->meaning;
+            return;
+        }
+    }
+    cout << "\nWord not found!";
+}
+
+int main() {
+    int choice, n;
+    string newWord, searchWord, newMeaning;
+    Dictionary d1;
+menu:
+    cout << "\n\nDICTIONARY: ";
+    cout << "\n\n1. Insert new words";
+    cout << "\n2. Display the dictionary in ascending order";
+    cout << "\n3. Display the dictionary in descending order";
+    cout << "\n4. Search and update a word";
+    cout << "\n5. Delete a word";
+    cout << "\n6. Comparisons";
+    cout << "\n7. Exit";
+
+    cout << "\n\nEnter your choice: ";
+    cin >> choice;
+    switch (choice) {
+    case 1:
+        cout << "\nEnter the number of words to insert: ";
+        cin >> n;
+        for (int i = 0; i < n; i++) {
+            cout << "\nEnter the word to be inserted: ";
+            cin >> newWord;
+            cout << "\nEnter its meaning: ";
+            cin >> newMeaning;
+            if (d1.root == NULL)
+                d1.root = new node(newWord, newMeaning);
+            else
+                d1.insert(d1.root, newWord, newMeaning);
+        }
+        break;
+    case 2:
+        d1.display_asc(d1.root);
+        break;
+    case 3:
+        d1.display_desc(d1.root);
+        break;
+    case 4:
+        cout << "\nEnter the word to search: ";
+        cin >> searchWord;
+        d1.updateWord(d1.root, searchWord);
+        break;
+    case 5:
+        cout << "\nEnter the word to delete: ";
+        cin >> searchWord;
+        d1.deleteWord(d1.root, searchWord);
+        break;
+    case 6:
+        cout << "\nEnter the word to find comparisons: ";
+        cin >> searchWord;
+        d1.comparisons(d1.root, searchWord);
+    }
+    if (choice != 7)
+        goto menu;
+    return 0;
+}
+
+
+
+
+
+
+//10. Aim: Read the marks obtained by students of second year in an online examination of  particular subject. Find out maximum and minimum marks obtained in that subject. Use  heap data structure. Analyze the algorithm.
+
+
+#include <iostream>
+using namespace std;
+
+class hp {
+    int heap[20], heap1[20], x, n1, i;
+
+public:
+    hp() {
+        heap[0] = 0;
+        heap1[0] = 0;
+    }
+    void getdata();
+    void insert1(int heap[], int);
+    void upadjust1(int heap[], int);
+    void insert2(int heap1[], int);
+    void upadjust2(int heap1[], int);
+    void minmax();
+};
+
+void hp::getdata() {
+    cout << "\n enter the no. of students : ";
+    cin >> n1;
+    cout << "\n enter the marks : ";
+    for (i = 0; i < n1; i++) {
+        cin >> x;
+        insert1(heap, x);
+        insert2(heap1, x);
+    }
+}
+
+void hp::insert1(int heap[20], int x) {
+    int n;
+    n = heap[0];
+    heap[n + 1] = x;
+    heap[0] = n + 1;
+    upadjust1(heap, n + 1);
+}
+
+void hp::upadjust1(int heap[20], int i) {
+    int temp;
+    while (i > 1 && heap[i] > heap[i / 2]) {
+        temp = heap[i];
+        heap[i] = heap[i / 2];
+        heap[i / 2] = temp;
+        i = i / 2;
+    }
+}
+
+void hp::insert2(int heap1[20], int x) {
+    int n;
+    n = heap1[0];
+    heap1[n + 1] = x;
+    heap1[0] = n + 1;
+    upadjust2(heap1, n + 1);
+}
+
+void hp::upadjust2(int heap1[20], int i) {
+    int temp1;
+    while (i > 1 && heap1[i] < heap1[i / 2]) {
+        temp1 = heap1[i];
+        heap1[i] = heap1[i / 2];
+        heap1[i / 2] = temp1;
+        i = i / 2;
+    }
+}
+
+void hp::minmax() {
+    cout << "\n max marks : " << heap[1] << endl;
+    cout << "\n min marks : " << heap1[1] << endl;
+}
+
+int main() {
+    hp h;
+    h.getdata();
+    h.minmax();
+    return 0;
+}
+
+
+
+
+
+//11.  Aim: Department maintains a student information. The file contains roll number, name, division and  address. Allow user to add, delete information of student. Display information of particular employee. If  record of student does not exist an appropriate message is displayed. If it is, then the system displays the  student details. Use sequential file to main the data
+
+
+#include <iostream>
+#include <fstream>
+#include <cstring>
+using namespace std;
+
+class tel {
+public:
+    int rollNo;
+    char name[10];
+    char div;
+    char address[20];
+
+    void accept() {
+        cout << "\n\tEnter Roll Number : ";
+        cin >> rollNo;
+        cout << "\n\tEnter the Name : ";
+        cin >> name;
+        cout << "\n\tEnter the Division : ";
+        cin >> div;
+        cout << "\n\tEnter the Address : ";
+        cin >> address;
+    }
+
+    int getRollNo() {
+        return rollNo;
+    }
+
+    void show() {
+        cout << "\n\t" << rollNo << "\t\t" << name << "\t\t" << div << "\t\t" << address;
+    }
+};
+
+int main() {
+    int ch;
+    tel t1;
+
+    fstream f;
+
+    do {
+        cout << "\n\t------MENU-------";
+        cout << "\n1.Insert and overwrite\n2.Show\n3.Search & Edit(number)\n4.Delete a Student Record\n5.Exit\n\tEnter the Choice\t:";
+
+        cin >> ch;
+
+        switch (ch) {
+            case 1: {
+                f.open("StuRecord.txt", ios::out | ios::app);
+                t1.accept();
+                f.write(reinterpret_cast<char *>(&t1), sizeof(tel));
+                f.close();
+                break;
+            }
+            case 2: {
+                f.open("StuRecord.txt", ios::in);
+                while (f.read(reinterpret_cast<char *>(&t1), sizeof(tel))) {
+                    t1.show();
+                }
+                f.close();
+                break;
+            }
+            case 3: {
+                int rec, count = 0;
+                cout << "\nEnter the roll number you want to find : ";
+                cin >> rec;
+                f.open("StuRecord.txt", ios::in | ios::out);
+                while (f.read(reinterpret_cast<char *>(&t1), sizeof(tel))) {
+                    if (rec == t1.rollNo) {
+                        cout << "\nRecord found";
+                        f.seekp(-sizeof(tel), ios::cur);
+                        t1.accept();
+                        f.write(reinterpret_cast<char *>(&t1), sizeof(tel));
+                        f.close();
+                        count++;
+                        break;
+                    }
+                }
+                if (count == 0) cout << "\nRecord not found";
+                f.close();
+                break;
+            }
+            case 4: {
+                int roll;
+                cout << "Please Enter the Roll No. of Student Whose Info You Want to Delete: ";
+                cin >> roll;
+                f.open("StuRecord.txt", ios::in);
+                ofstream temp("temp.txt", ios::out);
+                while (f.read(reinterpret_cast<char *>(&t1), sizeof(tel))) {
+                    if (t1.getRollNo() != roll) temp.write(reinterpret_cast<char *>(&t1), sizeof(tel));
+                    else cout << "The record with the roll no. " << roll << " has been deleted." << endl;
+                }
+                f.close();
+                temp.close();
+                remove("StuRecord.txt");
+                rename("temp.txt", "StuRecord.txt");
+                break;
+            }
+            case 5:
+                cout << "\n\tThank you";
+                break;
+            default:
+                cout << "\n\tInvalid choice. Please enter a valid choice.";
+                break;
+        }
+    } while (ch != 5);
+
+    return 0;
+}
+
+
+
+
+
+//12. Aim: Company maintains employee information as employee ID, name, designation and salary. Allow user to add, delete information of employee. Display information of particular employee. If employee does not exist an appropriate message is displayed. If it is, then the system displays the employee details. Use index sequential file to maintain the data.
+
+#include <iostream>
+#include <fstream>
+#include <cstring>
+
+using namespace std;
+
+struct Employee {
+    int id;
+    char name[50];
+    char designation[50];
+    float salary;
+};
+
+void addEmployee(fstream& file) {
+    Employee emp;
+    cout << "Enter employee ID: ";
+    cin >> emp.id;
+    cout << "Enter employee name: ";
+    cin.ignore();
+    cin.getline(emp.name, 50);
+    cout << "Enter employee designation: ";
+    cin.getline(emp.designation, 50);
+    cout << "Enter employee salary: ";
+    cin >> emp.salary;
+
+    file.write(reinterpret_cast<char*>(&emp), sizeof(Employee));
+    cout << "Employee added successfully!" << endl;
+}
+
+void deleteEmployee(fstream& file) {
+    int empId;
+    cout << "Enter employee ID to delete: ";
+    cin >> empId;
+
+    file.seekg(0, ios::beg);
+    Employee emp;
+    bool found = false;
+
+    while (file.read(reinterpret_cast<char*>(&emp), sizeof(Employee))) {
+        if (emp.id == empId) {
+            found = true;
+            break;
+        }
+    }
+
+    if (found) {
+        file.seekp(-static_cast<int>(sizeof(Employee)), ios::cur);
+        Employee emptyEmp = {0, "", "", 0};
+        file.write(reinterpret_cast<char*>(&emptyEmp), sizeof(Employee));
+        cout << "Employee deleted successfully!" << endl;
+    } else {
+        cout << "Employee not found!" << endl;
+    }
+}
+
+void displayEmployee(fstream& file) {
+    int empId;
+    cout << "Enter employee ID to display: ";
+    cin >> empId;
+
+    file.seekg(0, ios::beg);
+    Employee emp;
+    bool found = false;
+
+    while (file.read(reinterpret_cast<char*>(&emp), sizeof(Employee))) {
+        if (emp.id == empId) {
+            found = true;
+            break;
+        }
+    }
+
+    if (found) {
+        cout << "Employee ID: " << emp.id << endl;
+        cout << "Employee Name: " << emp.name << endl;
+        cout << "Employee Designation: " << emp.designation << endl;
+        cout << "Employee Salary: " << emp.salary << endl;
+    } else {
+        cout << "Employee not found!" << endl;
+    }
+}
+
+int main() {
+    fstream file("employee.dat", ios::binary | ios::in | ios::out | ios::trunc);
+    if (!file) {
+        cout << "Error in opening file!";
+        return 1;
+    }
+
+    int choice;
+    do {
+        cout << "1. Add Employee" << endl;
+        cout << "2. Delete Employee" << endl;
+        cout << "3. Display Employee" << endl;
+        cout << "4. Exit" << endl;
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice) {
+            case 1:
+                addEmployee(file);
+                break;
+            case 2:
+                deleteEmployee(file);
+                break;
+            case 3:
+                displayEmployee(file);
+                break;
+            case 4:
+                cout << "Exiting...";
+                break;
+            default:
+                cout << "Invalid choice!";
+        }
+
+        cout << endl;
+    } while (choice != 4);
+
+    file.close();
+    return 0;
+}
+
+
+
+
+
+
+
+
+
